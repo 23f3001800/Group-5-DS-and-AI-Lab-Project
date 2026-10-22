@@ -24,7 +24,7 @@ The course asks for this log to be updated every week with each member's contrib
 | Member name | Work completed | Evidence / report sections | Member confirmation |
 |---|---|---|---|
 | Jayesh Bansal | Project report | [project-report.md](documentation/milestone%201/project-report.md) | Jayesh Bansal |
-| Vikas | Presentation preparation | [SerpentGuard_AI_Group5_Presentation.pptx](documentation/milestone%201/assets/SerpentGuard_AI_Group5_Presentation.pptx) | Vikas |
+| Vikas | Presentation preparation | [SerpentGuard_AI_Group5_Presentation.pdf](documentation/milestone%201/assets/SerpentGuard_AI_Group5_Presentation.pdf) | Vikas |
 | Puneet Bajaj | Repository setup; feasibility and data check; report sections 1, 3, 5, 6, 7 and 9 and the references; data samples and output mockups; slide revision; README | [project-report.md](documentation/milestone%201/project-report.md), [README.md](README.md) | Puneet Bajaj |
 | Manas Rastogi | To be filled in by Manas |  |  |
 
@@ -37,6 +37,6 @@ By signing, each member confirms that they have reviewed this log, that their ow
 | Team member name | Roll Number | Signature / acknowledgment | Date |
 |---|---|---|---|
 | Jayesh Bansal | 24f100185 |![Jayesh Bansal](https://drive.google.com/uc?export=download&id=1imepTm_t9vgJVL367tWU-LPYcLq9Zet0)|22/10/2026|
-| Vikas | 23f3001800 |  |  |
+| Vikas | 23f3001800 | Vikas | 22/10/2026 |
 | Puneet Bajaj | 23f3002416 | Puneet Bajaj | 22/10/2026 |
 | Manas Rastogi |  |  |  |

@@ -21,7 +21,7 @@ Each member's weekly contributions are in [work-contribution-log.md](work-contri
 
 | # | Milestone | Due (2026) | Status | Documents |
 |---|---|---|---|---|
-| 1 | Problem definition and literature review | 22 Oct | Submitted | [Report](documentation/milestone%201/project-report.md) · [Slides](documentation/milestone%201/assets/SerpentGuard_AI_Group5_Presentation.pptx) |
+| 1 | Problem definition and literature review | 22 Oct | Submitted | [Report](documentation/milestone%201/project-report.md) · [Slides](documentation/milestone%201/assets/SerpentGuard_AI_Group5_Presentation.pdf) |
 | 2 | Dataset preparation | 29 Oct | Planned | |
 | 3 | Model architecture and end-to-end pipeline | 5 Nov | Planned | |
 | 4 | Model training | 19 Nov | Planned | |
