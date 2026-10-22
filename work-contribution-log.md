@@ -11,12 +11,10 @@ Use this log to record who completed each part of the milestone. Replace the bla
 
 | Work item | Contribution / evidence | Contributor(s) | Date or period | Reviewed / confirmed by |
 |---|---|---|---|---|
-| Project scope and objective | Drafted a proposed image-based snake identification objective and research questions. India-focused scope is a working assumption pending team confirmation. |  |  |  |
 | Literature review | Summarized SnakeCLEF benchmarks and added a sourced comparison of Google Lens/Search, Gemini Live, ChatGPT camera/video, direct LLM answers, and prior mobile/offline/video snake systems. | Jayesh Bansal | 22 Oct 2026 | Pending member confirmation |
 | Dataset research | Identified sample imagery and proposed dataset sourcing, license tracking, label checks, and split safeguards. |  |  |  |
 | Baseline and metrics plan | Documented published reference metrics and proposed project metrics; no project model results are claimed. |  |  |  |
 | Evaluation design | Proposed a locked matched-image comparison, class-wise and risk-sensitive analysis, location ablations, and expert review. |  |  |  |
-| Realtime/offline model plan | Added a proposed sampled-frame camera workflow, temporal stability checks, on-device fine-tuned model path, deployment measurements, and feasibility conditions. | Jayesh Bansal | 22 Oct 2026 | Pending member confirmation |
 | Product output mockups | Drafted example confident and uncertain prediction outputs. |  |  |  |
 | Report editing and verification | Updated the report with current product/research comparisons, cited implementation precedents, and marked unbuilt capabilities as proposals rather than results. | Jayesh Bansal | 22 Oct 2026 | Pending member confirmation |
 | Other (describe) |  |  |  |  |
