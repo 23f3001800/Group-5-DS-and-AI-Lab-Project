@@ -173,6 +173,6 @@ The literature establishes that image-based snake classification is feasible and
 | Team member name | Roll Number | Signature / acknowledgment | Date |
 |---|---|---|---|
 |Jayesh Bansal|24f100189|![Jayesh Bansal](https://drive.google.com/uc?export=download&id=1imepTm_t9vgJVL367tWU-LPYcLq9Zet0)|22/10/2026|
-|  |  |  |  |
+|Vikas |23f3001800|Vikas |22/10/2026|
 |  |  |  |  |
 |  |  |  |  |
