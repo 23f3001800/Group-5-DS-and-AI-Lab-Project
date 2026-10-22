@@ -1,18 +1,20 @@
 # Milestone 1 — Project Report
 
-**Project:** Snake Identification from Images  
-**Team:** Group 5 — DS and AI Lab Project  
-**Report status:** Proposal and literature review
+**Project:** SerpentGuard — Snake Identification<br>
+**Team:** Group 5 — DS and AI Lab Project<br>
+**Report status:** Proposal and literature review<br>
 **Date:** 22 October 2026
 
 ## 1. Objective and intended use
 
-Build and evaluate an image-based system that accepts a photograph of a snake and returns a ranked set of likely species for a defined Indian-region species list. The initial prototype should:
+Build and evaluate a snake-specific system for a defined Indian-region species list. The primary interaction should use a phone camera feed; a saved-photo path can support testing and fallback. The system should:
 
 1. Detect whether an image plausibly contains a snake, then classify the visible snake using a transfer-learned image model.
 2. Return the top three candidate species, calibrated confidence (or an explicit “uncertain / outside supported classes” result), common and scientific names, and a short explanation of useful visual cues.
-3. Optionally use a user-supplied coarse location (state or region) to re-rank candidates by known range. Location must not silently override visual evidence.
-4. Be usable as a research/demo tool on ordinary phone photographs, including varied backgrounds, lighting, scale, pose, and image quality.
+3. Analyze sampled camera frames in real time, smooth predictions across nearby frames, and show a result only when the evidence is stable enough. This is a target for a later prototype, not a feature implemented in this milestone.
+4. Run the fine-tuned classifier on-device without a network connection, if model size and measured device performance allow. The camera and photo paths should use the same model and evaluation rules.
+5. Optionally use a user-supplied coarse location (state or region) to re-rank candidates by known range. Location must not silently override visual evidence.
+6. Be usable as a research/demo tool on ordinary phone photographs and camera frames, including varied backgrounds, lighting, scale, pose, and image quality.
 
 The intended role is **decision support and education**, not a definitive field or clinical identification. A snakebite response must never be delayed or determined by this prototype. Any eventual first-aid information must be reviewed by qualified local medical authorities and shown separately from model predictions.
 
@@ -22,6 +24,7 @@ The intended role is **decision support and education**, not a definitive field 
 - Does location information improve macro-F1 and reduce confusion among lookalikes without making the model brittle when location is missing or wrong?
 - How much do long-tail balancing, targeted augmentation, and an uncertainty/rejection option improve performance on rare, visually similar, or out-of-scope snakes?
 - Can the resulting model deliver useful top-k suggestions with acceptable latency on the intended hardware?
+- Can an on-device model provide stable camera predictions with useful latency while remaining offline?
 
 ## 2. Problem and existing evidence
 
@@ -49,13 +52,24 @@ The sample panel below is from the augmentation figure in the open-access PLOS s
 
 | Option | What it offers | Strengths | Limitations relevant to this project |
 |---|---|---|---|
-| Global SnakeCLEF/PLOS ViT research model | Global, fine-grained image classification with optional geography | Published large-scale benchmark; 772 species; unusually strong reported accuracy and macro-F1 | Research benchmark performance is not transferable without a matched regional evaluation; long-tail and field-image gaps remain; model/data use and deployment conditions must be checked |
-| SnakeCLEF challenge systems | Shared datasets, held-out evaluation, and comparable metrics; 2024 includes India and medical-risk scenarios | Reproducible benchmark framing; emphasizes country-level and error-cost evaluation | Competition submissions are not necessarily consumer-ready products; exact test data and implementation constraints differ |
-| iNaturalist Computer Vision / Seek | General species suggestions based on community observation imagery; location can inform suggestions | Broad taxa and community review; accessible user-facing workflow | Suggestions are not a snake-specific clinical decision system; coverage and suggestion quality depend on region and observation density. iNaturalist itself notes that suggestions can be less reliable where observation coverage is sparse. [iNaturalist FAQ](https://www.inaturalist.org/posts/47454-faq) |
-| Regional snake identification references and expert communities | Human-readable species information and expert support, often region-specific | Local context and expert knowledge; can resolve cases that images alone cannot | Often manual and variable in response time; not a consistently measured automated benchmark |
-| Proposed Group 5 prototype | Region-scoped, ranked photo predictions with optional coarse location and uncertainty handling | Can target local lookalikes, provide transparent benchmark comparisons, and explicitly abstain when evidence is weak | Must establish a reliable labelled dataset and prove performance; no project baseline or implementation exists yet |
+| Google Search / Google Lens | Camera or uploaded image starts a visual search and returns visually similar pages and information; Lens can identify plants and animals | Fast, broad index and useful source discovery; works from a camera or image | Search matches are not a calibrated, fixed-label snake classifier. Results can vary with the web and do not provide a project-specific measured abstention or risk score. [Google Lens overview](https://blog.google/products-and-platforms/devices/google-lens/google-lens-features/), [Search by image help](https://support.google.com/websearch/answer/1325808) |
+| Gemini Live | Users can share a camera feed and ask spoken questions about what it sees | Natural, interactive live-camera assistance and general visual reasoning | General-purpose responses are not a fixed, regionally evaluated snake classifier; availability, connectivity, and response behavior depend on the service. [Gemini Live camera guide](https://blog.google/products-and-platforms/products/gemini/gemini-live-camera-how-to/) |
+| ChatGPT camera/video | Advanced Voice supports camera/video sharing on supported mobile experiences; the newer Live voice experience has different capabilities | Conversational follow-up and broad image understanding | Not trained or calibrated for this project's fixed regional class set; product mode and access vary. A direct answer can sound confident without a matched snake-specific validation result. [ChatGPT Voice FAQ](https://help.openai.com/en/articles/20001274-gpt-live-faq), [Voice with video](https://m.chatgpt.com/features/voice-with-video/) |
+| Direct response from a general LLM | User describes the snake, or supplies an image where supported, and asks for a name | No dedicated app or dataset setup; can explain its reasoning conversationally | Depends on the description or image and the model's general knowledge; no guaranteed label set, reproducible score, or reliable way to distinguish uncertainty from a plausible-sounding guess. It is a useful qualitative comparator, not a ground-truth system. |
+| Global SnakeCLEF/PLOS ViT research model | Global, fine-grained image classification with optional geography | Published large-scale benchmark; 772 species and strong reported accuracy and macro-F1 | Benchmark performance does not transfer automatically to an Indian field set; long-tail and field-image gaps remain. Model, data, and deployment terms need review. |
+| SnakeCLEF challenge systems | Shared datasets and held-out evaluation; 2024 addresses medically important scenarios and India | Reproducible research framing; includes domain shift and risk-sensitive evaluation. DINOv2 feature extraction was explored for SnakeCLEF 2024, with code released by the authors. [2024 study and code](https://arxiv.org/abs/2407.06178) | Competition systems are not automatically consumer products; datasets and deployment constraints differ. |
+| Prior mobile and real-time snake systems | Research prototypes include offline mobile classification and video-based recognition; a recent Serpent-ID paper reports YOLOv8-nano, TensorFlow Lite, and int8 quantization for real-time mobile use | Establish that offline/mobile and live video snake recognition are not new ideas | Species coverage, data, independent validation, safety behavior, and code availability vary. These are direct precedents, so the project must compare against them instead of claiming novelty for camera input alone. [Australian offline/online iOS study](https://aisel.aisnet.org/hicss-54/da/mobile_services/3/), [video-processing system](https://rda.sliit.lk/entities/publication/a7482c0f-95a5-441d-8340-ba9750477b44), [Serpent-ID](https://ieeexplore.ieee.org/abstract/document/11507553) |
+| Proposed Group 5 prototype | Region-scoped, fine-tuned on-device classifier that analyzes sampled live-camera frames, alongside a photo fallback | Aims to combine local species coverage, no required LLM/API call, consistent predictions over time, top-k output, and explicit abstention | Still a proposal. Feasibility depends on obtaining enough licensed, expert-checked local data and meeting latency/model-size targets on selected phones. No project model or measured baseline exists yet. |
 
-**Key proposed difference:** the project should optimize for a defined local species set and report class-balanced and safety-relevant errors, rather than claiming global coverage. It will expose uncertainty, evaluate “dangerous confusion” separately, and test the effect of location metadata as an ablation. This is a proposal, not a demonstrated advantage.
+**What we would do differently:** camera input is a usability choice, not our novelty claim: Lens, Gemini Live, ChatGPT camera features, and prior snake prototypes already cover parts of that experience. Our proposed contribution is to fine-tune and deploy a compact model for a clearly bounded Indian species list, run classification locally on sampled frames, and combine temporal stability with a calibrated reject option. We would test it against photo-only inference, the same model without temporal smoothing, and accessible alternatives on the same locked images/clips. If data rights, expert labels, or device benchmarks make the offline plan infeasible, we will report that and narrow the claim rather than substitute an LLM API and call it our core model. |
+
+### Proposed live-camera and offline design
+
+The camera stream should not be sent continuously to a language-model service. A lightweight snake-presence detector can screen frames; the local species model then evaluates selected frames or a tracked crop at a controlled rate. A short rolling window can combine class scores and suppress flickering labels. The interface should show “snake not found,” “uncertain,” or “possible match” when appropriate, and avoid presenting a species as safe to handle. A still-image mode should remain available for reproducible evaluation and phones with limited compute.
+
+The candidate model path is transfer learning from a compact image backbone, fine-tuned on the target species list, then exported and benchmarked in a mobile runtime such as TensorFlow Lite or ONNX Runtime Mobile. Quantization is an option only after checking its effect on rare classes and confidence calibration. Training may need a stronger backbone; the exported model should be chosen from measured accuracy, macro-F1, model size, memory, battery use, and p50/p95 latency on agreed devices. The detector and classifier can be separate initially; combining them is a later optimization, not a milestone assumption.
+
+Before implementation, the team must select target phones and species, confirm dataset licenses and expert review, and set a frame rate and latency target. Evaluate on held-out clips grouped by encounter/observation, not random adjacent frames. Compare a single sampled frame with temporal aggregation, and include motion blur, partial visibility, camera movement, and no-snake scenes. Report false detections and stability as well as classification metrics. The repository currently has no dataset, training code, model, or live-camera implementation, so all of this remains proposed work.
 
 ## 5. Baselines and target improvements
 
@@ -94,7 +108,9 @@ Use a **locked, observation-level test set** with expert-verified labels, class 
 3. Report top-1 and top-3 accuracy, macro-F1, per-class precision/recall, balanced accuracy, confusion matrices, calibration, coverage-versus-risk for abstention, and latency/model size. Provide bootstrap confidence intervals and group results by common/rare classes, region, quality, and medically important status.
 4. Predefine an asymmetric error analysis. Count venomous-to-nonvenomous confusions separately; report sensitivity/recall for medically important species and a cost-weighted score alongside standard metrics. Never collapse this into a single accuracy claim.
 5. Test location use with three settings: image only, image plus correct coarse location, and image plus missing/incorrect location. This reveals whether geography helps and whether it can harm.
-6. Have herpetology reviewers inspect a stratified sample of errors, uncertain predictions, and high-risk predictions. Compare model output with expert labels and, where feasible, independent human identification on the same blinded test examples.
+6. For the live workflow, use held-out clips and report clip-level top-1/top-3 correctness, time to first stable result, label changes per minute, false detections, and abstention coverage. Compare sampled-frame prediction with temporal aggregation. Do not treat adjacent frames as independent test examples.
+7. Compare Google Lens/Search, Gemini Live, and ChatGPT Advanced camera/video on the same safe, consented test images or clips where their interfaces permit. Record exact prompt, product mode, date, location setting, top returned species/pages, response time, and whether the tool abstains. Treat conversational LLM results as qualitative if the service does not expose ranked, reproducible predictions; do not infer a score from anecdotal examples. A direct text-only LLM response should be a separate condition based on the same written description.
+8. Have herpetology reviewers inspect a stratified sample of errors, uncertain predictions, and high-risk predictions. Compare model output with expert labels and, where feasible, independent human identification on the same blinded test examples.
 
 **Market comparison caveat:** iNaturalist/Seek and regional services are useful practical comparators, but their coverage, models, and interfaces change over time and they do not publish a directly comparable snake-only score on this project’s proposed test set. A fair “best available” claim requires executing the tools against the same locked images; until then, the report treats the literature ViT and SnakeCLEF as research baselines and consumer tools as workflow references.
 
@@ -149,12 +165,15 @@ The “guidance” content requires local expert/medical review. The model shoul
 | High headline accuracy can mask rare-class failure and overconfidence | Calibrate and communicate uncertainty | Include macro-F1, class-level results, calibration, top-k candidates, and unknown detection |
 | Global research model may be difficult to adapt/deploy locally | Build a reproducible, appropriately sized student prototype | Compare efficient pretrained backbones, model size, and inference time on agreed hardware |
 | Consumer tools do not offer directly comparable snake-specific scores | Run matched-image comparative evaluation | Freeze test images and tool settings; report date/version and unsupported predictions |
+| Camera access is already available in general assistants and earlier snake prototypes | Make the differentiator the local model and measurable behavior, not the camera button | Fine-tune a regional model; target offline inference and temporal stability; compare systems on the same images/clips |
+| Live video can produce flickering or confident errors, especially in poor conditions | Evaluate prediction stability and abstention across a clip | Measure per-clip correctness, time-to-stable-result, false detections, and reject coverage under motion/occlusion |
+| A hosted LLM API adds network dependence and recurring service cost | Keep the core species prediction independent of a hosted LLM | Run the exported classifier on device; any future language interface is optional and not the species-identification authority |
 
 ## 9. Milestone 1 conclusion and next work
 
-The literature establishes that image-based snake classification is feasible and that a large ViT system has reported strong global benchmark performance. It also shows why a new project must not rely on accuracy alone: data imbalance, geographic representation, difficult field images, lookalike species, and risk-asymmetric mistakes are central challenges. The proposed contribution is a transparent, region-scoped prototype with a fair matched-set comparison, optional location conditioning, top-k output, and explicit uncertainty handling.
+Published work establishes that snake classification has been attempted at global scale and in mobile, offline, and video prototypes. General-purpose products also offer visual search and live camera interaction, so camera input by itself is not a new contribution. A credible project direction is a regional model fine-tuned for a defined Indian species list, with a feasible on-device path, stable clip-level results, and explicit uncertainty. Those benefits remain hypotheses until the team builds and tests the model on licensed, independently reviewed data and representative phones.
 
-**Immediate next steps:** confirm target geography/species and user; choose a license-compatible dataset; define expert label policy and medically important taxonomy; create grouped train/validation/test manifests; build the simple pretrained baseline; then lock metrics and acceptance criteria before tuning.
+**Immediate next steps:** confirm target geography/species, user, and phone hardware; check dataset licenses and expert-label availability; define medically important taxonomy and label policy; create grouped image and clip splits; build a photo baseline; then benchmark an on-device export and add camera sampling/temporal smoothing only after its evaluation criteria are fixed.
 
 ## References
 
@@ -163,6 +182,13 @@ The literature establishes that image-based snake classification is feasible and
 3. Durso et al. (2021), [Supervised learning computer vision benchmark for snake species identification from photographs](https://pmc.ncbi.nlm.nih.gov/articles/PMC8093445/), *Frontiers in Artificial Intelligence*.
 4. Picek et al. (2024), [Overview of SnakeCLEF 2024: Revisiting Snake Species Identification in Medically Important Scenarios](https://dspace.zcu.cz/items/64e8cf26-55b0-42a1-bc2f-ac6da22c5173).
 5. iNaturalist, [Computer Vision FAQ](https://www.inaturalist.org/posts/47454-faq) and [Seek app information](https://www.inaturalist.org/pages/seek_app).
+6. Google, [Google Lens features](https://blog.google/products-and-platforms/devices/google-lens/google-lens-features/) and [Search by image help](https://support.google.com/websearch/answer/1325808), accessed 22 October 2026.
+7. Google, [Gemini Live camera guide](https://blog.google/products-and-platforms/products/gemini/gemini-live-camera-how-to/), accessed 22 October 2026.
+8. OpenAI, [ChatGPT Voice FAQ](https://help.openai.com/en/articles/20001274-gpt-live-faq) and [Voice with video](https://m.chatgpt.com/features/voice-with-video/), accessed 22 October 2026.
+9. Divya et al. (2021), [Snake Detection and Classification using Deep Learning](https://aisel.aisnet.org/hicss-54/da/mobile_services/3/), describing offline on-device and cloud-assisted iOS prototypes.
+10. [Smart Snake Identification System using Video Processing](https://rda.sliit.lk/entities/publication/a7482c0f-95a5-441d-8340-ba9750477b44), project record describing offline and online video recognition.
+11. [Serpent-ID: A Deep Learning-Based Mobile Application for Rapid Snake Identification and Bite Management Guidance](https://ieeexplore.ieee.org/abstract/document/11507553), IEEE Xplore record; reported implementation details should be checked against the full paper before using them as a benchmark.
+12. [Transfer Learning with Self-Supervised Vision Transformers for Snake Identification](https://arxiv.org/abs/2407.06178) and the authors' [SnakeCLEF 2024 implementation](https://github.com/dsgt-kaggle-clef/snakeclef-2024).
 
 <div style="page-break-before: always"></div>
 
@@ -174,5 +200,6 @@ The literature establishes that image-based snake classification is feasible and
 |---|---|---|---|
 |Jayesh Bansal|24f100189|![Jayesh Bansal](https://drive.google.com/uc?export=download&id=1imepTm_t9vgJVL367tWU-LPYcLq9Zet0)|22/10/2026|
 |Vikas |23f3001800|Vikas |22/10/2026|
+|Jayesh Bansal|24f100189|Pending acknowledgment|22/10/2026|
 |  |  |  |  |
 |  |  |  |  |
