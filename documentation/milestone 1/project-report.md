@@ -170,15 +170,9 @@ The literature establishes that image-based snake classification is feasible and
 
 **This is the final page of the report. Each team member must complete and sign one row before submission.** By signing, each member confirms that they have reviewed the submitted document, understand its contents, and agree with the submission.
 
-| Team member name (print) | Signature / acknowledgment | Date |
-|---|---|---|
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-|  |  |  |
-
-Add rows if the team has more members. Do not submit until every team member has signed.
+| Team member name | Roll Number | Signature / acknowledgment | Date |
+|---|---|---|---|
+|Jayesh Bansal|24f100189|![Jayesh Bansal](https://drive.google.com/uc?export=download&id=1imepTm_t9vgJVL367tWU-LPYcLq9Zet0)|22/10/2026|
+|  |  |  |  |
+|  |  |  |  |
+|  |  |  |  |
