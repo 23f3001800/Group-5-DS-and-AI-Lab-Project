@@ -67,7 +67,7 @@ An earlier challenge on 45 North American species reported 84% accuracy and F1 0
 
 SnakeCLEF 2023 and 2024 moved to medically important scenarios. They evaluated generalization in India, Central America and southern Africa and weighted errors unevenly, so a venomous snake predicted as harmless costs more [4]. Top-1 accuracy alone is therefore not enough for this project.
 
-For detection, two studies report YOLO-based snake detectors. Naresh et al. (2024) report 87% detection precision [13]. Najm et al. (2025) trained YOLOv8-Nano on 8,500 images of 10 species and report precision 0.88, recall 0.91 and mAP@0.5 0.892 at 142 FPS in their Table 1. Their abstract gives 92.7 mAP@0.5, which does not match that table, so we quote the table [14]. Neither paper reports calibrated confidence or abstention.
+For detection, two studies report YOLO-based snake detectors. Naresh et al. (2024) report 87% detection precision [13]. Najm et al. (2025) trained YOLOv8-Nano on 8,500 images of 10 species and report precision 0.88, recall 0.91 and mAP@0.5 0.892 at 142 FPS in their Table 1. Their abstract gives 92.7 mAP@0.5, which does not match that table, so we quote the table [14]. Najm et al. report no calibrated confidence or abstention, and the Naresh et al. abstract gives only precision.
 
 ## 3. Data samples and data plan
 
@@ -165,7 +165,7 @@ Disputed or mis-identified taxa, rare classes, geographic and platform bias, rep
 | Direct response from a general LLM | The user describes the snake or uploads an image | No setup, and it explains its reasoning | No fixed label set, no reproducible score, and no reliable way to tell real uncertainty from a plausible guess. Useful as a qualitative comparison only |
 | Global PLOS ViT (Bolon et al. 2022) | A 772-species classifier with optional geography | 92.2% macro-F1 on its benchmark; weights and code released under BSD-3 | The ONNX model is about 1.1 GB, too large for a phone; trained mostly on North American photos; not tested on Indian field photos [2] |
 | SnakeCLEF challenge systems | Shared datasets and held-out evaluation, with a 2023 and 2024 focus on medically important scenarios including India | Reproducible research setup; DINOv2 features explored, with released code [12] | Evaluated on static photos on a server GPU and not designed for live, on-device video |
-| YOLO snake detectors | Real-time detection: 87% precision [13]; YOLOv8-Nano at 0.88 precision and 142 FPS on 10 species [14] | Show that real-time detection on edge hardware is practical | Detection only, or coarse species; neither reports calibrated abstention |
+| YOLO snake detectors | Real-time detection: 87% precision [13]; YOLOv8-Nano at 0.88 precision and 142 FPS on 10 species [14] | Show that real-time detection on edge hardware is practical | Detection only, or coarse species; we found no calibrated abstention in either |
 | Earlier mobile and video snake systems | Offline iOS classification [9], video-based recognition [10], and Serpent-ID with YOLOv8-nano and TensorFlow Lite [11] | Show that offline and video snake recognition already exist | Species coverage, independent validation and safety behaviour vary. We compare against them and do not claim camera input as new |
 | SerpentGuard AI (ours, proposed) | Detector, tracker and 27-species classifier on photos and on every live frame; calibrated abstention; offline export | Fixed Indian class list, measured dangerous-species recall, temporal stability, and no LLM or API in the loop | Still a proposal with no measured model. Labels come from community agreement without expert review |
 
@@ -213,11 +213,11 @@ We have no paid compute, so every step must fit the free tiers of Kaggle and Goo
 | Run detector, tracker and classifier on the 540 clips | Kaggle T4 | Under an hour |
 | Export int8 TFLite/ONNX models | Colab | Minutes |
 
-These GPU figures are our estimates, not measurements: they assume a T4 trains these small models at a few hundred images per second, and we will measure the real rate in Milestone 3. Even at double the estimate, the total stays under one account's weekly quota, and the team has four accounts.
+The GPU figures are estimates. They assume a T4 trains these small models at a few hundred images per second, and we will measure the real rate in Milestone 3. Even at double the estimate, about 45 GPU hours, the training fits in the two weeks of Milestones 3 and 4 on one account, and the team has four accounts.
 
 Two things cannot run on Kaggle or Colab alone:
 
-- The live webcam demo. A notebook cannot use the viewer's camera as a stream, so the demo runs as a Gradio app on a team member's laptop (CPU), which is also where O6 is measured. YOLOv8n's published CPU time is 80.4 ms per 640-pixel frame [22]; at a 320 to 416-pixel input and with the classifier run on tracked crops, 10 FPS is a reasonable target, to be confirmed in Milestone 3. For a hosted link, Hugging Face now requires a paid plan for new Gradio Spaces on CPU, but free accounts can host up to 2 Gradio Spaces on ZeroGPU, and static Spaces are free [27]. We will use a ZeroGPU Space for the photo demo, or a free static Space that runs the ONNX models in the browser.
+- The live webcam demo. A notebook runs on a remote machine, so every camera frame would have to travel from the browser to it and back. The demo therefore runs as a Gradio app on a team member's laptop (CPU), which is also where O6 is measured. YOLOv8n's published CPU time is 80.4 ms per 640-pixel frame [28]; at a 320 to 416-pixel input and with the classifier run on tracked crops, 10 FPS is a reasonable target, to be confirmed in Milestone 3. For a hosted link, Hugging Face now requires a paid plan for new Gradio Spaces on CPU, but free accounts can host up to 2 Gradio Spaces on ZeroGPU, and static Spaces are free [27]. We will use a ZeroGPU Space for the photo demo, or a free static Space that runs the ONNX models in the browser.
 - The phone benchmark (O7) needs an Android phone. If MobileViT does not convert cleanly to TFLite, we will export a MobileNetV3 classifier for the phone build and report the accuracy difference.
 
 ## 6. Baselines and evaluation plan
@@ -261,8 +261,8 @@ Each step below is tested as an ablation on the same locked test set, so we can 
 |---|---|---|
 | Species identification | 92.2% macro-F1 on 772 species with about 386k photos [2]; 0.83 F1 on 45 species, falling to 0.73 on expert-labelled private photos [3] | Macro-F1 ≥ 0.80 on 27 Indian species with about 36k photos (O1). Lower than the global model, which has ten times more data, but measured on Indian, post-2021 photos it has never seen |
 | Snake detection | 87% to 88% precision [13, 14] | Precision and recall ≥ 0.90 (O5) |
-| Dangerous-species safety | Not reported by the YOLO detection papers [13, 14]; weighted in SnakeCLEF scoring [4] | Recall ≥ 0.95 on WHO Category 1 and 2 species; ≤ 2% of them labelled as not-listed (O2, O3) |
-| Calibrated abstention | Not reported in the detection papers [13, 14] | ECE ≤ 0.05, error ≤ 5% at 80% coverage (O4) |
+| Dangerous-species safety | Not reported by Najm et al. [14] or in the Naresh et al. abstract [13]; weighted in SnakeCLEF scoring [4] | Recall ≥ 0.95 on WHO Category 1 and 2 species; ≤ 2% of them labelled as not-listed (O2, O3) |
+| Calibrated abstention | Not reported by Najm et al. [14] or in the Naresh et al. abstract [13] | ECE ≤ 0.05, error ≤ 5% at 80% coverage (O4) |
 | Speed and size | 142 FPS for YOLOv8-Nano on a GPU [14]; the global ViT model file is about 1.1 GB [2] | ≥ 10 FPS on a laptop CPU (O6); both models ≤ 25 MB on a phone (O7) |
 | Live video | No published clip-level results found for snake ID | ≤ 1 label flip per 10-second clip and a first stable label within 2 s (O6) |
 
@@ -280,7 +280,7 @@ Top-1 and top-3 accuracy, macro-F1, balanced accuracy, per-class precision and r
 
 ## 7. Expected product outputs (illustrative mockups)
 
-These two mockups show what the finished system should return. The photos are real samples from our planned dataset, but the boxes, scores and labels are placeholders we drew by hand, not predictions from a trained model.
+These two mockups show what the finished system should return. The photos are real samples from our planned dataset. The boxes, scores and labels are placeholders we chose by hand, not predictions from a trained model.
 
 ### Example A: confident, in-scope photo
 
@@ -349,6 +349,7 @@ Snake classification has been done at global scale and in mobile and video proto
 25. GPU Per Hour (21 September 2026). [Free Cloud GPUs in 2026: What Works and What Closed](https://gpuperhour.com/blog/free-cloud-gpus-and-credits). Third-party summary of Kaggle's notebook limits; Kaggle does not publish a fixed weekly quota.
 26. Spheron (2026). [Google Colab alternatives: 8 GPU clouds compared](https://www.spheron.network/blog/google-colab-alternatives-8-gpu-clouds-compared-2026/). Third-party summary of Colab free-tier limits.
 27. Hugging Face, [Spaces overview](https://huggingface.co/docs/hub/en/spaces-overview), accessed 22 October 2026 (paid plan needed for new Gradio and Docker Spaces; up to 2 free Gradio Spaces on ZeroGPU; static Spaces free).
+28. Ultralytics, [YOLOv8 model page](https://docs.ultralytics.com/models/yolov8/), accessed 22 October 2026 (YOLOv8n: 3.2M parameters, 80.4 ms CPU ONNX at 640 px; the test CPU is not stated).
 
 <div style="page-break-before: always"></div>
 
