@@ -26,7 +26,7 @@ Complete one entry per team member. Give concrete work performed and point to se
 
 | Member name | Work completed | Evidence / report sections | Member confirmation |
 |---|---|---|---|
-|  |  |  |  |
+| Vikas | Presentation preparation | documentation/milestone 1/assets/SerpentGuard_AI_Group5_Presentation.pptx | Vikas |
 |  |  |  |  |
 |  |  |  |  |
 |  |  |  |  |
