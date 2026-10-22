@@ -28,12 +28,7 @@ Complete one entry per team member. Give concrete work performed and point to se
 | Member name | Work completed | Evidence / report sections | Member confirmation |
 |---|---|---|---|
 | Vikas | Presentation preparation | documentation/milestone 1/assets/SerpentGuard_AI_Group5_Presentation.pptx | Vikas |
-| Jayesh Bansal | Updated the report's product and research comparison; proposed an offline fine-tuned model and live-camera evaluation plan; checked claims against linked sources and marked planned work as unimplemented. | Sections 1, 4, 8, 9 and References in documentation/milestone 1/project-report.md | Pending confirmation |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
-|  |  |  |  |
+| Jayesh Bansal | Project Report | documentation/milestone 1/project-report.md | Jayesh Bansal |
 |  |  |  |  |
 |  |  |  |  |
 
