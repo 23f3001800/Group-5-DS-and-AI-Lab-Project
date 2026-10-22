@@ -1,33 +1,35 @@
-# Milestone 1 — Work Contribution Log
+# Work contribution log
 
-**Project:** Snake Identification from Images
-**Team:** Group 5 — DS and AI Lab Project
-**Reporting period:** Milestone 1 report preparation
-**Status:** Fill in names, dates, and verified contributions before submission
+Project: SerpentGuard AI, snake detection and classification<br>
+Team: Group 5, DS and AI Lab Project. Team lead Jayesh Bansal; members Vikas, Puneet Bajaj and Manas Rastogi
 
-Use this log to record who completed each part of the milestone. Replace the blank member slots with the actual team roster. Describe contributions accurately; a task may be shared by multiple members. Add rows as needed.
+The course asks for this log to be updated every week with each member's contributions. Add each new week above the previous one. Members check their own rows, and everyone also signs the acknowledgment page of each milestone report.
 
-## Contribution entries
+## Week 1: 18 to 22 October 2026 (Milestone 1, problem definition and literature review)
+
+### Contribution entries
 
 | Work item | Contribution / evidence | Contributor(s) | Date or period | Reviewed / confirmed by |
 |---|---|---|---|---|
+| Repository setup | Created the GitHub repository | Puneet Bajaj | 18 Oct 2026 | Puneet Bajaj |
 | Literature review | Summarized SnakeCLEF benchmarks and added a sourced comparison of Google Lens/Search, Gemini Live, ChatGPT camera/video, direct LLM answers, and prior mobile/offline/video snake systems. | Jayesh Bansal | 22 Oct 2026 | Pending member confirmation |
-| Dataset research | Identified sample imagery and proposed dataset sourcing, license tracking, label checks, and split safeguards. |  |  |  |
-| Baseline and metrics plan | Documented published reference metrics and proposed project metrics; no project model results are claimed. |  |  |  |
-| Evaluation design | Proposed a locked matched-image comparison, class-wise and risk-sensitive analysis, location ablations, and expert review. |  |  |  |
-| Product output mockups | Drafted example confident and uncertain prediction outputs. |  |  |  |
+| Dataset research | Identified sample imagery and proposed dataset sourcing, license tracking, label checks, and split safeguards. | To be confirmed by the team |  |  |
+| Baseline and metrics plan | Documented published reference metrics and proposed project metrics; no project model results are claimed. | To be confirmed by the team |  |  |
+| Evaluation design | Proposed a locked matched-image comparison, class-wise and risk-sensitive analysis, location ablations, and expert review. | To be confirmed by the team |  |  |
+| Product output mockups | Drafted example confident and uncertain prediction outputs. | To be confirmed by the team |  |  |
 | Report editing and verification | Updated the report with current product/research comparisons, cited implementation precedents, and marked unbuilt capabilities as proposals rather than results. | Jayesh Bansal | 22 Oct 2026 | Pending member confirmation |
-| Other (describe) |  |  |  |  |
+| Presentation | Prepared the Milestone 1 slide deck. | Vikas | 22 Oct 2026 | Vikas |
+| Feasibility review and data check | Checked the plan against each milestone's requirements. Counted the available data with the iNaturalist API (27 Indian species with at least 200 CC-licensed research-grade observations each), located the released PLOS baseline model, the Open Images snake boxes and the WHO species categories, and found no public species-labelled snake video. | Puneet Bajaj | 22 Oct 2026 | Pending member confirmation |
+| Report and slide revision | Added scope, stakeholders and measurable targets for the M1 rubric, the species table, the grouped-split and video-clip plan, and the detector, tracker and classifier architecture. Corrected the PLOS first author, replaced slide figures and chart values that had no source, matched the slide claims to the report, and added a slide on scope, stakeholders and targets. | Puneet Bajaj | 22 Oct 2026 | Pending member confirmation |
+| Repository documentation | Wrote the README, extended `.gitignore` to keep data and model files out of git, and fixed the links in this log. | Puneet Bajaj | 22 Oct 2026 | Pending member confirmation |
 
-## Member contribution summary
-
-Complete one entry per team member. Give concrete work performed and point to sections, research, or artifacts where possible. Do not use this table as a substitute for the report's final-page sign-off.
+### Member contribution summary
 
 | Member name | Work completed | Evidence / report sections | Member confirmation |
 |---|---|---|---|
-| Vikas | Presentation preparation | documentation/milestone 1/assets/SerpentGuard_AI_Group5_Presentation.pptx | Vikas |
-| Jayesh Bansal | Project Report | documentation/milestone 1/project-report.md | Jayesh Bansal |
-|  |  |  |  |
-|  |  |  |  |
+| Jayesh Bansal | Project report | [project-report.md](documentation/milestone%201/project-report.md) | Jayesh Bansal |
+| Vikas | Presentation preparation | [SerpentGuard_AI_Group5_Presentation.pptx](documentation/milestone%201/assets/SerpentGuard_AI_Group5_Presentation.pptx) | Vikas |
+| Puneet Bajaj | Repository setup; feasibility and data check; report sections 1, 3, 5, 6 and 9 and the references; slide revision; README | [project-report.md](documentation/milestone%201/project-report.md), [README.md](README.md) | Puneet Bajaj |
+| Manas Rastogi | To be filled in by Manas |  |  |
 
-Add rows for the full team. Each member should verify that their entry is accurate. All members must also sign the acknowledgment page at the end of the [Milestone 1 project report](project-report.md).
+All members must also sign the acknowledgment page at the end of the [Milestone 1 project report](documentation/milestone%201/project-report.md).

@@ -1,1 +1,36 @@
+# OS / editor
 .DS_Store
+.idea/
+.vscode/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.ipynb_checkpoints/
+*.egg-info/
+
+# Data: never commit images or downloads; commit manifests and scripts instead
+data/raw/
+data/interim/
+data/processed/
+data/clips/
+*.zip
+*.tar
+*.tar.gz
+
+# Models and training outputs
+checkpoints/
+runs/
+outputs/
+wandb/
+*.pt
+*.pth
+*.ckpt
+*.onnx
+*.tflite
+*.safetensors
+
+# Secrets
+.env
